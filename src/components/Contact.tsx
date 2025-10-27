@@ -3,31 +3,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import emailjs from '@emailjs/browser';
-
-const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "";
-const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "";
-const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "";
-// ...existing imports...
-
-// const Contact = () => {
-//   const [isLoading, setIsLoading] = useState(false);
-//   // ...existing formData state...
-
-  
-
-  // // Update the Button component in the form:
-  // <Button 
-  //   type="submit" 
-  //   className="w-full glow-cyan hover:scale-105 transition-smooth"
-  //   size="lg"
-  //   disabled={isLoading}
-  // >
-  //   {isLoading ? "Sending..." : "Send Message"}
-  //   <Send className="ml-2 h-4 w-4" />
-  // </Button>
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -39,23 +17,19 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
-    toast.error("EmailJS not configured. Set env vars and restart the dev server.");
-    return;
-  }
     setIsLoading(true);
 
     try {
       await emailjs.send(
-        SERVICE_ID,
-        TEMPLATE_ID,
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '',
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '',
         {
           from_name: formData.name,
           from_email: formData.email,
           message: formData.message,
           to_email: 'e.shreyasmb.cse@gmail.com',
         },
-        PUBLIC_KEY
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || ''
       );
 
       toast.success("Message sent! I'll get back to you soon.");
